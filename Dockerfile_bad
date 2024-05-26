@@ -10,4 +10,6 @@ RUN pip install pandas
 
 EXPOSE 8080
 
+VOLUME /app/data
+
 CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8080", "--no-browser", "--allow-root", "--NotebookApp.token=''"]

@@ -8,4 +8,6 @@ USER jupyter
 
 WORKDIR /home/jupyter
 
+VOLUME /app/data
+
 ENTRYPOINT ["jupyterhub", "--log-level=DEBUG"]
