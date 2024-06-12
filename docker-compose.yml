@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  init:
+    image: my_jupyterhub_image
+    container_name: init_service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["sh", "/init/init.sh"]
+    depends_on:
+      - db
+    networks:
+      - my_network
+
+  app:
+    image: my_jupyterhub_image
+    container_name: app_service
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - my_network
+
+  db:
+    image: postgres:13
+    container_name: db_service
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - my_network
+
+volumes:
+  pgdata:
+
+networks:
+  my_network:
+    driver: bridge

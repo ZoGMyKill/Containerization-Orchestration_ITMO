@@ -1,0 +1,2 @@
+jupyterhub
+psycopg2-binary
