@@ -7,7 +7,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: ["sh", "/init/init.sh"]
+    command: ["/bin/sh", "/init.sh"]
     depends_on:
       - db
     networks:

@@ -1,13 +1,23 @@
 FROM jupyterhub/jupyterhub:3.1.1
 
-RUN apt update && apt -y install git vim
+# Устанавливаем нужные зависимости
+RUN pip install --no-cache-dir jupyterhub-nativeauthenticator psycopg2-binary notebook
 
-RUN useradd -ms /bin/bash jupyter
+# Создаем пользователя для JupyterHub
+RUN useradd -ms /bin/bash admin
 
-USER jupyter
+# Копируем конфигурационный файл JupyterHub
+COPY jupyterhub_config.py /srv/jupyterhub/jupyterhub_config.py
+COPY app.py /srv/jupyterhub/app.py
+COPY init.sh /init.sh
 
-WORKDIR /home/jupyter
+# Устанавливаем права для конфигурационного файла и скриптов
+RUN chown -R admin:admin /srv/jupyterhub
+RUN chmod +x /init.sh
+USER admin
 
-VOLUME /app/data
+# Рабочая директория
+WORKDIR /srv/jupyterhub
 
-ENTRYPOINT ["jupyterhub", "--log-level=DEBUG"]
+# Команда по умолчанию для запуска JupyterHub
+CMD ["python3", "app.py"]
