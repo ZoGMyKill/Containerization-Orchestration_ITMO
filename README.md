@@ -31,3 +31,33 @@ kubectl config view
 ```
 ![img](./img/ver_kubectl.jpeg)
 
+## Nextcloud + PostgreSQL
+```
+kubectl apply -f postgres-secret.yml
+kubectl apply -f postgres-configmap.yml
+kubectl apply -f postgres-service.yml
+kubectl apply -f postgres-deployment.yml
+
+kubectl apply -f nextcloud-secret.yml
+kubectl apply -f nextcloud-configmap.yml
+kubectl apply -f nextcloud-deployment.yml
+```
+![img](./img/nc_start.png)
+![img.png](img/http.png)
+![img.png](img/nc_log.png)
+![img.png](img/dashboard.png)
+
+## Вопросы
+1. Важен ли порядок выполнения этих манифестов? Почему?
+- Да, важно, как минмиум можно рассмотреть наш случай. Предположим, что мы выполянем deployment перед configmap и мы просто напросто не знаем какие занчения логина, тк обращаемся к пустоте. Кстати, я попал в глупую ловушку когда при копировании закинул код не на свое место и долго не мог понять почему постгря уже есть хотя я ничего не деплоил.
+
+2. Что произойдет, если отскейлить количество реплик postgres-deployment в 0, затем обратно в 1, после чего попробовать снова зайти на Nextcloud?
+- Зависает и потом улетает с ошибкой безвозвратно.
+
+```
+Internal Server Error
+
+The server encountered an internal error and was unable to complete your request.
+Please contact the server administrator if this error reappears multiple times, please include the technical details below in your report.
+More details can be found in the server log.
+```
