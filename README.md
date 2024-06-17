@@ -1,43 +1,33 @@
 # Описание задачи
 
-Создать docker-compose.yml из минимум трех сервисов
+Установить Kubernetes на локальную машину. Развернуть тестовый сервис
 
-## Разворачивание
-Для запуска
+## kubectl
+Для установки
 ```
-docker-compose up --build
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 ```
-Чтобы все снести
+Проверяем
 ```
-docker-compose down
+kubectl version --client
 ```
+![img](./img/inst_kubectl.jpeg)
 
+## minikube
 
-## Что делает docker-compose:
-- Определяет три сервиса: init для инициализации приложения, app для основного JupyterHub с доступом через порт 8000, db для PostgreSQL.
-- Устанавливает зависимость сервиса app от db для корректного запуска друг за другом.
-- Задает healthcheck для сервиса app, который периодически проверяет доступность по указанному порту.
-- Использует .env файл для передачи данных в сервис db.
-- Создает сеть my_network для изоляции сервисов.
-
-## Ответы на вопросы
-
-1. **Можно ли ограничивать ресурсы (например, память или CPU) для сервисов в docker-compose.yml? Если нет, то почему, если да, то как?**
-      -  Да можно, дополнительно прописав в docker-compose.yml дополнительные строки, подробнее в https://docs.docker.com/compose/compose-file/deploy/:
+Для установки
 ```
-deploy:
-  resources:
-    limits:
-      cpus: '0.001'
-      memory: 50M
-    reservations:
-      cpus: '0.0001'
-      memory: 20M
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+minikube start
 ```
-
-2. **Как можно запустить только определенный сервис из docker-compose.yml, не запуская остальные?**
-     - Для запуска определенного сервиса из *docker-compose.yml*, не запуская остальные, можно использовать команду с указанием имени конкретного сервиса.
+![img](./img/inst_minikube.jpeg)
+Проверяем
 ```
-docker-compose up <NAME_APP>
+docker ps
+kubectl config view
 ```
+![img](./img/ver_kubectl.jpeg)
 
