@@ -3,6 +3,11 @@
 Развернуть свой собственный сервис в Kubernetes, по аналогии с ЛР 3
 
 ## jupyterhub + PostgreSQL
+Запускаем Minikube
+```
+minikube start
+```
+
 Сборка и загрузка Docker образа в Minikube
 ```
 eval $(minikube docker-env)
@@ -11,17 +16,15 @@ docker build -t custom-jupyterhub:latest .
 
 Для разворачивания
 ```
-kubectl apply -f postgres-secret.yaml
-kubectl apply -f postgres-configmap.yaml
-kubectl apply -f postgres-service.yaml
-kubectl apply -f postgres-deployment.yaml
-kubectl apply -f jupyterhub-configmap.yaml
-kubectl apply -f jupyterhub-service.yaml
-kubectl apply -f jupyterhub-deployment.yaml
+kubectl create -f pg_secret.yml
+kubectl create -f pg_configmap.yml
+kubectl create -f pg_service.yml
+kubectl create -f pg_deployment.yml
 
+kubectl create -f jupyterhub.yml
 ```
 Проверяем
 ```
-kubectl version --client
+minikube service jupyterhub-service
 ```
-![img](./img/inst_kubectl.jpeg)
+![img.png](img/img.png)

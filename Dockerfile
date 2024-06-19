@@ -9,11 +9,9 @@ RUN useradd -ms /bin/bash admin
 # Копируем конфигурационный файл JupyterHub
 COPY jupyterhub_config.py /srv/jupyterhub/jupyterhub_config.py
 COPY app.py /srv/jupyterhub/app.py
-COPY init.sh /init.sh
 
 # Устанавливаем права для конфигурационного файла и скриптов
 RUN chown -R admin:admin /srv/jupyterhub
-RUN chmod +x /init.sh
 USER admin
 
 # Рабочая директория
