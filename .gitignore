@@ -17,3 +17,5 @@ docs/_build/
 tests/__pycache__/
 tests/*.py[cod]
 .tox/
+
+kubectl
